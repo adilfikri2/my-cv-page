@@ -1,0 +1,608 @@
+<html><head><base href="https://cdnjs.cloudflare.com/" ><style>
+    body {
+        font-family: 'Roboto', Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+    }
+    .container {
+        display: flex;
+        max-width: 1400px;
+        margin: 0 auto;
+        gap: 20px;
+    }
+    .input-section, .preview-section {
+        flex: 1;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    h1, h2, h3 {
+        color: #2c3e50;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    form {
+        display: grid;
+        gap: 20px;
+    }
+    label {
+        font-weight: 500;
+        color: #34495e;
+        display: block;
+        margin-bottom: 5px;
+    }
+    input[type="text"], textarea, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus, textarea:focus, select:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+    .experience-section, .education-section, .language-section {
+        background-color: #ecf0f1;
+        padding: 20px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        transition: box-shadow 0.3s ease;
+    }
+    .experience-section:hover, .education-section:hover, .language-section:hover {
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+        background-color: #3498db;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #2980b9;
+    }
+    .menu {
+        background-color: #34495e;
+        padding: 15px;
+        border-radius: 4px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .menu button {
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        margin-right: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .menu button:hover {
+        background-color: #1abc9c;
+    }
+    #generate-cv-word, #generate-cv-pdf {
+        background-color: #e74c3c;
+    }
+    #generate-cv-word:hover, #generate-cv-pdf:hover {
+        background-color: #c0392b;
+    }
+    #llm-model {
+        margin-bottom: 20px;
+        width: 100%;
+        padding: 10px;
+    }
+    .search-container {
+        display: flex;
+        gap: 10px;
+    }
+    #search {
+        flex-grow: 1;
+    }
+    .section-title {
+        background-color: #3498db;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+    }
+    .remove-btn {
+        background-color: #e74c3c;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        float: right;
+    }
+    .remove-btn:hover {
+        background-color: #c0392b;
+    }
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        cursor: help;
+    }
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+    #progress-bar {
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+    #progress {
+        width: 0%;
+        height: 20px;
+        background-color: #4CAF50;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+    #cv-preview {
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-height: 500px;
+    }
+    
+    /* Nouveaux styles pour le template CV */
+    .cv-template {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #f0f0f0;
+        padding: 20px;
+    }
+    .cv-header {
+        background-color: #7f94b0;
+        color: white;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .cv-logo {
+        width: 100px;
+        height: auto;
+    }
+    .cv-title {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .cv-content {
+        background-color: white;
+        padding: 20px;
+    }
+    .cv-section {
+        margin-bottom: 20px;
+    }
+    .cv-section-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #7f94b0;
+        border-bottom: 2px solid #7f94b0;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+    }
+    .cv-item {
+        margin-bottom: 10px;
+    }
+    .cv-item-title {
+        font-weight: bold;
+    }
+    .cv-footer {
+        text-align: right;
+        font-size: 12px;
+        color: #888;
+        margin-top: 20px;
+    }
+    .cv-content p {
+        text-align: justify;
+    }
+    .cv-content ul {
+        padding-left: 20px;
+        margin: 0;
+    }
+    .cv-content li {
+        margin-bottom: 5px;
+    }
+    .generate-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .cv-missions {
+        white-space: pre-line;
+    }
+</style></head><body>
+<div class="container">
+    <div class="input-section">
+        <h1>Générateur de CV Intelligent</h1>
+
+        <div class="generate-buttons">
+            <button id="generate-cv-word">Générer le CV en Word</button>
+            <button id="generate-cv-pdf">Générer le CV en PDF</button>
+        </div>
+
+        <div class="menu">
+            <div>
+                <button id="previous">Précédent</button>
+                <button id="next">Suivant</button>
+                <button id="history">Historique</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Recherche par mots-clés">
+                <button id="search-button">Rechercher</button>
+            </div>
+        </div>
+
+        <div id="progress-bar">
+            <div id="progress"></div>
+        </div>
+
+        <select id="llm-model">
+            <option value="claude">Claude 3.5</option>
+            <option value="gpt4">ChatGPT 4.0</option>
+        </select>
+
+        <form id="cv-form" method="POST" action="https://api.example.com/generate-cv">
+            <div class="section-title">Informations Personnelles</div>
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" name="nom" required>
+
+            <label for="age">Âge:</label>
+            <input type="text" id="age" name="age" required>
+
+            <label for="nationalite">Nationalité:</label>
+            <input type="text" id="nationalite" name="nationalite" required>
+
+            <label for="domicile">Domicile:</label>
+            <input type="text" id="domicile" name="domicile" required>
+
+            <label for="disponibilite">Disponibilité:</label>
+            <input type="text" id="disponibilite" name="disponibilite" required>
+
+            <label for="resume">Résumé:</label>
+            <textarea id="resume" name="resume" rows="4" required></textarea>
+
+            <div class="section-title">Compétences</div>
+            <label for="competences">Compétences: <span class="tooltip">?<span class="tooltiptext">Listez vos compétences principales, séparées par des virgules</span></span></label>
+            <textarea id="competences" name="competences" rows="4" required></textarea>
+
+            <div class="section-title">Expériences Professionnelles</div>
+            <div id="experiences"></div>
+            <button type="button" id="add-experience">Ajouter une expérience</button>
+
+            <div class="section-title">Formation</div>
+            <div id="formations"></div>
+            <button type="button" id="add-formation">Ajouter une formation</button>
+
+            <div class="section-title">Certifications</div>
+            <label for="certifications">Certifications:</label>
+            <textarea id="certifications" name="certifications" rows="3"></textarea>
+
+            <div class="section-title">Langues</div>
+            <div id="langues"></div>
+            <button type="button" id="add-langue">Ajouter une langue</button>
+        </form>
+    </div>
+
+    <div class="preview-section">
+        <h2>Aperçu du CV</h2>
+        <div id="cv-preview" class="cv-template">
+            <div class="cv-header">
+                <img src="https://example.com/logo.png" alt="Logo" class="cv-logo">
+                <div class="cv-title">Expert poste de travail</div>
+            </div>
+            <div class="cv-content">
+                <div class="cv-section">
+                    <div class="cv-section-title">Données personnelles</div>
+                    <div class="cv-item">
+                        <span class="cv-item-title">Âge:</span> <span id="preview-age"></span>
+                    </div>
+                    <div class="cv-item">
+                        <span class="cv-item-title">Nationalité:</span> <span id="preview-nationalite"></span>
+                    </div>
+                    <div class="cv-item">
+                        <span class="cv-item-title">Domicile:</span> <span id="preview-domicile"></span>
+                    </div>
+                    <div class="cv-item">
+                        <span class="cv-item-title">Disponibilité:</span> <span id="preview-disponibilite"></span>
+                    </div>
+                </div>
+                <div class="cv-section">
+                    <div class="cv-section-title">Résumé</div>
+                    <p id="preview-resume"></p>
+                </div>
+                <div class="cv-section">
+                    <div class="cv-section-title">Compétences</div>
+                    <ul id="preview-competences"></ul>
+                </div>
+                <div class="cv-section">
+                    <div class="cv-section-title">Expériences professionnelles</div>
+                    <div id="preview-experiences"></div>
+                </div>
+                <div class="cv-section">
+                    <div class="cv-section-title">Formation</div>
+                    <div id="preview-formations"></div>
+                </div>
+                <div class="cv-section">
+                    <div class="cv-section-title">Certifications</div>
+                    <ul id="preview-certifications"></ul>
+                </div>
+                <div class="cv-section">
+                    <div class="cv-section-title">Langues</div>
+                    <ul id="preview-langues"></ul>
+                </div>
+            </div>
+            <div class="cv-footer">
+                Page 1 sur 1
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+let experienceCount = 0;
+let formationCount = 0;
+let langueCount = 0;
+
+function addExperience() {
+    const experiences = document.getElementById('experiences');
+    const newExperience = document.createElement('div');
+    newExperience.className = 'experience-section';
+    newExperience.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeSection(this)">Supprimer</button>
+        <label for="date_debut_${experienceCount}">Date de début:</label>
+        <input type="text" id="date_debut_${experienceCount}" name="date_debut[]" required>
+        
+        <label for="date_fin_${experienceCount}">Date de fin:</label>
+        <input type="text" id="date_fin_${experienceCount}" name="date_fin[]" required>
+        
+        <label for="entreprise_${experienceCount}">Entreprise:</label>
+        <input type="text" id="entreprise_${experienceCount}" name="entreprise[]" required>
+        
+        <label for="titre_poste_${experienceCount}">Titre du poste:</label>
+        <input type="text" id="titre_poste_${experienceCount}" name="titre_poste[]" required>
+        
+        <label for="projet_${experienceCount}">Projet:</label>
+        <input type="text" id="projet_${experienceCount}" name="projet[]" required>
+        
+        <label for="missions_${experienceCount}">Missions et responsabilités:</label>
+        <textarea id="missions_${experienceCount}" name="missions[]" rows="3" required></textarea>
+    `;
+    experiences.appendChild(newExperience);
+    experienceCount++;
+    updateProgress();
+    updatePreview();
+}
+
+function addFormation() {
+    const formations = document.getElementById('formations');
+    const newFormation = document.createElement('div');
+    newFormation.className = 'education-section';
+    newFormation.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeSection(this)">Supprimer</button>
+        <label for="annee_${formationCount}">Année:</label>
+        <input type="text" id="annee_${formationCount}" name="annee[]" required>
+        
+        <label for="diplome_${formationCount}">Diplôme:</label>
+        <input type="text" id="diplome_${formationCount}" name="diplome[]" required>
+        
+        <label for="etablissement_${formationCount}">Établissement:</label>
+        <input type="text" id="etablissement_${formationCount}" name="etablissement[]" required>
+    `;
+    formations.appendChild(newFormation);
+    formationCount++;
+    updateProgress();
+    updatePreview();
+}
+
+function addLangue() {
+    const langues = document.getElementById('langues');
+    const newLangue = document.createElement('div');
+    newLangue.className = 'language-section';
+    newLangue.innerHTML = `
+        <button type="button" class="remove-btn" onclick="removeSection(this)">Supprimer</button>
+        <label for="langue_${langueCount}">Langue:</label>
+        <input type="text" id="langue_${langueCount}" name="langue[]" required>
+        
+        <label for="niveau_${langueCount}">Niveau:</label>
+        <select id="niveau_${langueCount}" name="niveau[]" required>
+            <option value="Débutant">Débutant</option>
+            <option value="Intermédiaire">Intermédiaire</option>
+            <option value="Avancé">Avancé</option>
+            <option value="Courant">Courant</option>
+            <option value="Natif">Natif</option>
+        </select>
+    `;
+    langues.appendChild(newLangue);
+    langueCount++;
+    updateProgress();
+    updatePreview();
+}
+
+function removeSection(button) {
+    button.parentElement.remove();
+    updateProgress();
+    updatePreview();
+}
+
+function updateProgress() {
+    const requiredFields = document.querySelectorAll('input[required], textarea[required], select[required]');
+    const filledFields = Array.from(requiredFields).filter(field => field.value.trim() !== '');
+    const progress = (filledFields.length / requiredFields.length) * 100;
+    document.getElementById('progress').style.width = `${progress}%`;
+}
+
+function updatePreview() {
+    const formData = new FormData(document.getElementById('cv-form'));
+    
+    document.getElementById('preview-age').textContent = formData.get('age') || '';
+    document.getElementById('preview-nationalite').textContent = formData.get('nationalite') || '';
+    document.getElementById('preview-domicile').textContent = formData.get('domicile') || '';
+    document.getElementById('preview-disponibilite').textContent = formData.get('disponibilite') || '';
+    document.getElementById('preview-resume').textContent = formData.get('resume') || '';
+    
+    const competencesList = document.getElementById('preview-competences');
+    competencesList.innerHTML = '';
+    formData.get('competences').split(',').forEach(comp => {
+        const li = document.createElement('li');
+        li.textContent = comp.trim();
+        competencesList.appendChild(li);
+    });
+
+    const previewExperiences = document.getElementById('preview-experiences');
+    previewExperiences.innerHTML = '';
+    const experiences = formData.getAll('entreprise[]');
+    experiences.forEach((entreprise, index) => {
+        const expDiv = document.createElement('div');
+        expDiv.className = 'cv-item';
+        expDiv.innerHTML = `
+            <div class="cv-item-title">${entreprise} - ${formData.getAll('titre_poste[]')[index]}</div>
+            <div>${formData.getAll('date_debut[]')[index]} - ${formData.getAll('date_fin[]')[index]}</div>
+            <div>Projet: ${formData.getAll('projet[]')[index]}</div>
+            <div class="cv-missions">Missions:
+${formData.getAll('missions[]')[index].split('\n').map(mission => `• ${mission.trim()}`).join('\n')}
+            </div>
+        `;
+        previewExperiences.appendChild(expDiv);
+    });
+
+    const previewFormations = document.getElementById('preview-formations');
+    previewFormations.innerHTML = '';
+    const formations = formData.getAll('diplome[]');
+    formations.forEach((diplome, index) => {
+        const formDiv = document.createElement('div');
+        formDiv.className = 'cv-item';
+        formDiv.innerHTML = `
+            <div class="cv-item-title">${diplome}</div>
+            <div>${formData.getAll('annee[]')[index]} - ${formData.getAll('etablissement[]')[index]}</div>
+        `;
+        previewFormations.appendChild(formDiv);
+    });
+
+    const certificationsList = document.getElementById('preview-certifications');
+    certificationsList.innerHTML = '';
+    formData.get('certifications').split('\n').forEach(cert => {
+        if (cert.trim()) {
+            const li = document.createElement('li');
+            li.textContent = cert.trim();
+            certificationsList.appendChild(li);
+        }
+    });
+
+    const languesList = document.getElementById('preview-langues');
+    languesList.innerHTML = '';
+    const langues = formData.getAll('langue[]');
+    langues.forEach((langue, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${langue} - ${formData.getAll('niveau[]')[index]}`;
+        languesList.appendChild(li);
+    });
+}
+
+document.getElementById('add-experience').addEventListener('click', addExperience);
+document.getElementById('add-formation').addEventListener('click', addFormation);
+document.getElementById('add-langue').addEventListener('click', addLangue);
+
+async function generateCV(format) {
+    const formData = new FormData(document.getElementById('cv-form'));
+    formData.append('llm_model', document.getElementById('llm-model').value);
+    formData.append('format', format);
+    try {
+        const response = await axios.post('https://api.example.com/generate-cv', formData, {
+            responseType: 'blob'
+        });
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `cv.${format}`);
+        document.body.appendChild(link);
+        link.click();
+    } catch (error) {
+        console.error(`Erreur lors de la génération du CV en ${format}:`, error);
+        alert(`Une erreur est survenue lors de la génération du CV en ${format}. Veuillez réessayer.`);
+    }
+}
+
+document.getElementById('generate-cv-word').addEventListener('click', () => generateCV('docx'));
+document.getElementById('generate-cv-pdf').addEventListener('click', () => generateCV('pdf'));
+
+function loadPreviousCV() {
+    console.log("Chargement du CV précédent");
+    // Implémentation à venir
+}
+
+function loadNextCV() {
+    console.log("Chargement du CV suivant");
+    // Implémentation à venir
+}
+
+function showHistory() {
+    console.log("Affichage de l'historique des CV");
+    // Implémentation à venir
+}
+
+function searchCV() {
+    const keywords = document.getElementById('search').value;
+    console.log(`Recherche de CV avec les mots-clés: ${keywords}`);
+    // Implémentation à venir
+}
+
+document.getElementById('previous').addEventListener('click', loadPreviousCV);
+document.getElementById('next').addEventListener('click', loadNextCV);
+document.getElementById('history').addEventListener('click', showHistory);
+document.getElementById('search-button').addEventListener('click', searchCV);
+
+document.getElementById('cv-form').addEventListener('input', function() {
+    updateProgress();
+    updatePreview();
+});
+
+// Ajout initial d'une expérience, d'une formation et d'une langue
+addExperience();
+addFormation();
+addLangue();
+
+// Initialiser la barre de progression et l'aperçu
+updateProgress();
+updatePreview();
+</script>
+</body></html>
